@@ -1,9 +1,7 @@
 package quickjs
 
 /*
-#include <stdlib.h>
-#include <string.h>
-#include "quickjs.h"
+#include "bridge.h"
 */
 import "C"
 

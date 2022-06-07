@@ -1,8 +1,6 @@
 package quickjs
 
 /*
-#include <stdlib.h>
-#include <string.h>
 #include "bridge.h"
 */
 import "C"
