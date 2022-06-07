@@ -11,7 +11,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            platform: [ubuntu-18.04, macos-12]
+            platform: [ubuntu-18.04, macos-11]
             arch: [x86_64, arm64]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -27,11 +27,11 @@ jobs:
         
     - name: Build QuickJS linux
       if: matrix.platform == 'ubuntu-18.04'
-      run: cd deps/quickjs && make && cp *.a ../libs/linux_${{ matrix.arch }}
+      run: rm -rf libs/linux_${{ matrix.arch }} && mkdir libs/linux_${{ matrix.arch }} && cd deps/quickjs && make && cp *.a ../libs/linux_${{ matrix.arch }}
       
     - name: Build QuickJS MAC
       if: matrix.platform == 'macos-12'
-      run: cd deps/quickjs && make && cp *.a ../libs/darwin_${{ matrix.arch }}
+      run: rm -rf libs/linux_${{ matrix.arch }} && mkdir libs/linux_${{ matrix.arch }} && cd deps/quickjs && make && cp *.a ../libs/darwin_${{ matrix.arch }}
 
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
