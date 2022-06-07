@@ -1,4 +1,4 @@
-name: build quickjs lib
+name: Build QuickJS Static library
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    name: Build V8 for ${{ matrix.platform }} ${{ matrix.arch }}
+    name: Build QuickJS for ${{ matrix.platform }} ${{ matrix.arch }}
     strategy:
         fail-fast: false
         matrix:
