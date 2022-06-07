@@ -27,11 +27,11 @@ jobs:
         
     - name: Build QuickJS linux
       if: matrix.platform == 'ubuntu-18.04'
-      run: cd deps/quickjs && make && cp *.a linux_${{ matrix.arch }}
+      run: cd deps/quickjs && make && cp *.a ../libs/linux_${{ matrix.arch }}
       
     - name: Build QuickJS MAC
       if: matrix.platform == 'macos-12'
-      run: cd deps/quickjs && make && cp *.a darwin_${{ matrix.arch }}
+      run: cd deps/quickjs && make && cp *.a ../libs/darwin_${{ matrix.arch }}
 
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
