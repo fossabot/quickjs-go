@@ -8,8 +8,7 @@ package quickjs
 #cgo CFLAGS: -DCONFIG_BIGNUM
 #cgo CFLAGS: -DEMSCRIPTEN
 #cgo CFLAGS: -I./deps/include
-#cgo LDFLAGS: -lm
-#cgo darwin,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/darwin_amd64 -lquickjs
-#cgo linux,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/linux_amd64 -lquickjs
+#cgo darwin,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/darwin_amd64 -lquickjs -lm
+#cgo linux,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/linux_amd64 -lquickjs -lm
 */
 import "C"
