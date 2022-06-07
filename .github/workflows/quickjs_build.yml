@@ -1,0 +1,42 @@
+name: build quickjs lib
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+
+    name: Build V8 for ${{ matrix.platform }} ${{ matrix.arch }}
+    strategy:
+        fail-fast: false
+        matrix:
+            platform: [ubuntu-18.04, macos-12]
+            arch: [x86_64, arm64]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          submodules: true
+          fetch-depth: 1
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+        
+    - name: Build QuickJS linux
+      if: matrix.platform == 'ubuntu-18.04'
+      run: cd deps/quickjs && make && copy *.a linux_${{ matrix.arch }}
+      
+    - name: Build QuickJS MAC
+      if: matrix.platform == 'macos-12'
+      run: cd deps/quickjs && make && copy *.a darwin_${{ matrix.arch }}
+
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+        branch-suffix: random
+        delete-branch: true
+        title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
