@@ -12,7 +12,7 @@ jobs:
         fail-fast: false
         matrix:
             platform: [ubuntu-18.04, macos-11]
-            arch: [x86_64, arm64]
+            arch: [x86_64]
     runs-on: ${{ matrix.platform }}
     steps:
     - name: Checkout
@@ -20,7 +20,7 @@ jobs:
       with:
           submodules: true
           fetch-depth: 1
-    - name: Set up Go
+    - name: Set up C
       uses: actions/setup-go@v3
       with:
         go-version: 1.18
