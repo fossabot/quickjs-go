@@ -1,8 +1,6 @@
 package quickjs
 
 /*
-#cgo CFLAGS: -I./deps/vendor/github.com/koush/quickjs
-
 #include <stdlib.h>
 #include <string.h>
 #include "quickjs.h"
