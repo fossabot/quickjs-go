@@ -10,6 +10,7 @@ jobs:
         fail-fast: false
         matrix:
             platform: [ubuntu-18.04, macos-11]
+            arch: [amd64, arm64]
     runs-on: ${{ matrix.platform }}
     steps:
 
@@ -19,26 +20,26 @@ jobs:
           submodules: true
           fetch-depth: 1
 
-    - name: Pull Docker Image
-      if: matrix.platform == 'ubuntu-18.04'
-      run: docker pull multiarch/crossbuild && cd deps/quickjs
+    - name: Pull GCC Docker Image
+      if: matrix.platform == 'ubuntu-18.04' && matrix.arch == 'amd64'
+      run: docker pull gcc
 
     - name: Build linux amd64
-      if: matrix.platform == 'ubuntu-18.04'
-      run: rm -rf deps/libs/linux_amd64 && mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir multiarch/crossbuild /bin/bash -c "make clean && make "  && mv *.a ../libs/linux_amd64
+      if: matrix.platform == 'ubuntu-18.04'  && matrix.arch == 'amd64'
+      run: rm -rf deps/libs/linux_amd64 && mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir gcc /bin/bash -c "make clean && make "  && mv *.a ../libs/linux_amd64
 
-    - name: Build linux arm64
-      if: matrix.platform == 'ubuntu-18.04'
-      run: rm -rf deps/libs/linux_arm64 && mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild /bin/bash -c "make clean && ln -s /usr/aarch64-linux-gnu/lib/* /lib/ && make " && mv *.a ../libs/linux_arm64
+#     - name: Build linux arm64
+#       if: matrix.platform == 'ubuntu-18.04'
+#       run: rm -rf deps/libs/linux_arm64 && mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild /bin/bash -c "make clean && ln -s /usr/aarch64-linux-gnu/lib/* /lib/ && make " && mv *.a ../libs/linux_arm64
 
-    - name: Build darwin amd64 
-      if: matrix.platform == 'macos-11'
-      run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make && mv *.a ../libs/darwin_amd64
+#     - name: Build darwin amd64 
+#       if: matrix.platform == 'macos-11'
+#       run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make && mv *.a ../libs/darwin_amd64
       
-    - name: Create PR
-      uses: peter-evans/create-pull-request@v3
-      with:
-        commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
-        branch-suffix: random
-        delete-branch: true
-        title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+#     - name: Create PR
+#       uses: peter-evans/create-pull-request@v3
+#       with:
+#         commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+#         branch-suffix: random
+#         delete-branch: true
+#         title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
