@@ -1,38 +1,35 @@
-name: Build QuickJS Static library
+name: Build QuickJS
 
 on:
   workflow_dispatch:
 
-
 jobs:
   build:
-
-    name: Build QuickJS for ${{ matrix.platform }} ${{ matrix.arch }}
+    name: Build QuickJS
     strategy:
         fail-fast: false
-        matrix:
-            platform: [ubuntu-18.04, macos-11]
-            arch: [amd64]
-    runs-on: ${{ matrix.platform }}
+    runs-on: macos-11
     steps:
+
     - name: Checkout
       uses: actions/checkout@v3
       with:
           submodules: true
           fetch-depth: 1
-          
-    - name: Build QuickJS linux
-      if: matrix.platform == 'ubuntu-18.04'
-      run: rm -rf deps/libs/linux_amd64 && mkdir deps/libs/linux_amd64 && cd deps/quickjs && make && mv *.a ../libs/linux_amd64
-      
-    - name: Build QuickJS MAC
-      if: matrix.platform == 'macos-11'
-      run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make && mv *.a ../libs/darwin_amd64
 
+    - name: Prebuild
+      run: rm -rf deps/libs/darwin* && cp -a deps/Makefile deps/quickjs
+
+    - name: Build darwin amd64 
+      run: mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make libquickjs.a && mv libquickjs.a ../libs/darwin_amd64
+
+    - name: Build darwin arm64 
+      run: mkdir deps/libs/darwin_arm64 && cd deps/quickjs && make clean && make -e CONFIG_DARWIN_ARM64=y libquickjs.a && mv libquickjs.a ../libs/darwin_arm64
+      
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+        commit-message: Update QuickJS static library
         branch-suffix: random
         delete-branch: true
-        title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+        title: QuickJS static library
