@@ -20,13 +20,22 @@ jobs:
           submodules: true
           fetch-depth: 1
 
-    - name: Pull GCC Docker Image
+    - name: Pull linux amd64
       if: matrix.platform == 'ubuntu-18.04' && matrix.arch == 'amd64'
       run: docker pull gcc
 
     - name: Build linux amd64
       if: matrix.platform == 'ubuntu-18.04'  && matrix.arch == 'amd64'
       run: rm -rf deps/libs/linux_amd64 && mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/home gcc /bin/bash -c "cd /home && make clean && make "  && mv *.a ../libs/linux_amd64
+
+    - name: Pull linux arm64
+      if: matrix.platform == 'ubuntu-18.04' && matrix.arch == 'arm64'
+      run: docker pull arm64v8/gcc
+
+    - name: Build linux arm64
+      if: matrix.platform == 'ubuntu-18.04'  && matrix.arch == 'arm64'
+      run: rm -rf deps/libs/linux_arm64 && mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/home gcc /bin/bash -c "cd /home && make clean && make "  && mv *.a ../libs/linux_arm64
+
 
 #     - name: Build linux arm64
 #       if: matrix.platform == 'ubuntu-18.04'
@@ -36,10 +45,10 @@ jobs:
 #       if: matrix.platform == 'macos-11'
 #       run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make && mv *.a ../libs/darwin_amd64
       
-#     - name: Create PR
-#       uses: peter-evans/create-pull-request@v3
-#       with:
-#         commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
-#         branch-suffix: random
-#         delete-branch: true
-#         title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+        branch-suffix: random
+        delete-branch: true
+        title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
