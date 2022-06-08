@@ -20,17 +20,13 @@ jobs:
           submodules: true
           fetch-depth: 1
 
-    - name: Docker Pull
+    - name: Docker Pull Image
       if: matrix.platform == 'ubuntu-18.04'
       run: cd deps/quickjs && docker pull multiarch/crossbuild
 
-    - name: Docker Build
+    - name: Build for linux amd64
       if: matrix.platform == 'ubuntu-18.04'
-      run: docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild ln -s /usr/aarch64-linux-gnu/lib/* /lib/ &&  make
-
-    - name: Copy File
-      if: matrix.platform == 'ubuntu-18.04'
-      run: mv *.a ../libs/linux_amd64
+      run: docker run --rm -v ./:/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild ln -s /usr/aarch64-linux-gnu/lib/* /lib/ &&  make && mv *.a ../libs/linux_amd64
       
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
