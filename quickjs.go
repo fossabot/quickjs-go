@@ -10,5 +10,6 @@ package quickjs
 #cgo CFLAGS: -I./deps/include
 #cgo darwin,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/darwin_amd64 -lquickjs -lm
 #cgo linux,amd64 LDFLAGS: -L${SRCDIR}/deps/libs/linux_amd64 -lquickjs -lm
+#cgo linux,arm64 LDFLAGS: -L${SRCDIR}/deps/libs/linux_arm64 -lquickjs -lm
 */
 import "C"
