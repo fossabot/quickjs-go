@@ -24,12 +24,15 @@ jobs:
       run: rm -rf deps/libs/linux* && cp -a deps/Makefile deps/quickjs
       
     - name: Pull Images
+      if: matrix.platform == 'ubuntu-18.04'
       run: docker pull gcc && docker pull arm64v8/gcc
     
     - name: Build linux amd64
+      if: matrix.platform == 'ubuntu-18.04'
       run: mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/home gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_amd64
 
     - name: Build linux arm64
+      if: matrix.platform == 'ubuntu-18.04'
       run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/home arm64v8/gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
 
       
