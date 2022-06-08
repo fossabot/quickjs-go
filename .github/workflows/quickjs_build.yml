@@ -33,7 +33,7 @@ jobs:
 
     - name: Build linux arm64
       if: matrix.platform == 'ubuntu-18.04'
-      run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/home arm64v8/gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
+      run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --platform linux/amd64 --rm -v $(pwd):/home arm64v8/gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
 
       
     - name: Prebuild for mac
