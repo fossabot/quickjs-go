@@ -1,0 +1,41 @@
+name: Build QuickJS
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+
+    name: Build QuickJS for ${{ matrix.platform }}
+    strategy:
+        fail-fast: false
+        matrix:
+            platform: [ubuntu-18.04]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          submodules: true
+          fetch-depth: 1
+
+    - name: Docker Pull
+      if: matrix.platform == 'ubuntu-18.04'
+      run: cd deps/quickjs && docker pull multiarch/crossbuild
+
+    - name: Docker Build
+      if: matrix.platform == 'ubuntu-18.04'
+      run: docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild ln -s /usr/aarch64-linux-gnu/lib/* /lib/ &&  make
+
+    - name: Copy File
+      if: matrix.platform == 'ubuntu-18.04'
+      run: mv *.a ../libs/linux_amd64
+      
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: Update QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
+        branch-suffix: random
+        delete-branch: true
+        title: QuickJS static library for ${{ matrix.platform }} ${{ matrix.arch }}
