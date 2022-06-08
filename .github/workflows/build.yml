@@ -26,7 +26,7 @@ jobs:
 
     - name: Build for linux amd64
       if: matrix.platform == 'ubuntu-18.04'
-      run: docker run --rm -v ./:/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild ln -s /usr/aarch64-linux-gnu/lib/* /lib/ &&  make && mv *.a ../libs/linux_amd64
+      run: docker run --rm -v deps/quickjs:/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild ln -s /usr/aarch64-linux-gnu/lib/* /lib/ &&  make && mv *.a ../libs/linux_amd64
       
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
