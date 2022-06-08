@@ -21,11 +21,7 @@ jobs:
 
     - name: Prebuild for linux
       if: matrix.platform == 'ubuntu-18.04'
-      run: rm -rf deps/libs/linux* && cp -a deps/Makefile deps/quickjs
-      
-    - name: Pull Images
-      if: matrix.platform == 'ubuntu-18.04'
-      run: docker pull gcc && docker pull aarch64-linux-gnu
+      run: rm -rf deps/libs/linux* && docker pull aarch64-linux-gnu
     
     - name: Build linux amd64
       if: matrix.platform == 'ubuntu-18.04'
