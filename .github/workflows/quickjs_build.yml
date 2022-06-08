@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Build QuickJS Static library
+    name: Build QuickJS Static Library
     strategy:
         fail-fast: false
     runs-on: macos-11
@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 1
 
     - name: Prebuild
-      run: rm -rf deps/libs/darwin* && cp -a deps/Makefile deps/quickjs
+      run: rm -rf deps/libs/darwin* && rm -rf deps/libs/linux* && cp -a deps/Makefile deps/quickjs
 
     - name: Build darwin amd64 
       run: mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make libquickjs.a && mv libquickjs.a ../libs/darwin_amd64
@@ -26,10 +26,19 @@ jobs:
     - name: Build darwin arm64 
       run: mkdir deps/libs/darwin_arm64 && cd deps/quickjs && make clean && make -e CONFIG_DARWIN_ARM64=y libquickjs.a && mv libquickjs.a ../libs/darwin_arm64
       
+    - name: Pull Images
+      run: docker pull gcc && docker pull arm64v8/gcc
+    
+    - name: Build linux amd64
+      run: mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/home gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_amd64
+
+    - name: Build linux arm64
+      run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/home arm64v8/gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
+
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: Update QuickJS Static library
+        commit-message: Update QuickJS Static Library
         branch-suffix: random
         delete-branch: true
-        title: QuickJS Static library
+        title: Update QuickJS Static library
