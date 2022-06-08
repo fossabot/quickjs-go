@@ -29,7 +29,7 @@ jobs:
     
     - name: Build linux amd64
       if: matrix.platform == 'ubuntu-18.04'
-      run: mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/home gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_amd64
+      run: mkdir deps/libs/linux_amd64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir multiarch/crossbuild /bin/bash -c "cd /workdir && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_amd64
 
     - name: Build linux arm64
       if: matrix.platform == 'ubuntu-18.04'
