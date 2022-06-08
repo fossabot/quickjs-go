@@ -31,9 +31,9 @@ jobs:
       if: matrix.platform == 'ubuntu-18.04'
       run: rm -rf deps/libs/linux_arm64 && mkdir deps/libs/linux_arm64 && cd deps/quickjs && make clean && docker run --rm -v ${pwd}:/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild /bin/bash -c "ln -s /usr/aarch64-linux-gnu/lib/* /lib/ && cd /workdir && make" && mv *.a ../libs/linux_arm64
 
-    - name: Build darwin amd64 
-      if: matrix.platform == 'macos-11'
-      run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make && mv *.a ../libs/darwin_amd64
+#     - name: Build darwin amd64 
+#       if: matrix.platform == 'macos-11'
+#       run: rm -rf deps/libs/darwin_amd64 && mkdir deps/libs/darwin_amd64 && cd deps/quickjs && make clean && make && mv *.a ../libs/darwin_amd64
       
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
