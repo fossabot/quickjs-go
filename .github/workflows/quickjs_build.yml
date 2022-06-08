@@ -1,4 +1,4 @@
-name: Build QuickJS Static library
+name: Build QuickJS Static Library
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       
     - name: Pull Images
       if: matrix.platform == 'ubuntu-18.04'
-      run: docker pull gcc && docker pull arm64v8/gcc
+      run: docker pull gcc && docker pull aarch64-linux-gnu
     
     - name: Build linux amd64
       if: matrix.platform == 'ubuntu-18.04'
@@ -33,7 +33,7 @@ jobs:
 
     - name: Build linux arm64
       if: matrix.platform == 'ubuntu-18.04'
-      run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --platform linux/amd64 --rm -v $(pwd):/home arm64v8/gcc /bin/bash -c "cd /home && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
+      run: mkdir deps/libs/linux_arm64 && cd deps/quickjs && docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu multiarch/crossbuild /bin/bash -c "cd /workdir && make clean && make libquickjs.a "  && mv libquickjs.a ../libs/linux_arm64
 
       
     - name: Prebuild for mac
