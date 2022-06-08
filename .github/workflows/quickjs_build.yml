@@ -1,11 +1,11 @@
-name: Build QuickJS
+name: Build QuickJS Static library
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build QuickJS
+    name: Build QuickJS Static library
     strategy:
         fail-fast: false
     runs-on: macos-11
@@ -29,7 +29,7 @@ jobs:
     - name: Create PR
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: Update QuickJS static library
+        commit-message: Update QuickJS Static library
         branch-suffix: random
         delete-branch: true
-        title: QuickJS static library
+        title: QuickJS Static library
