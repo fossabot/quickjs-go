@@ -1,5 +1,16 @@
 # quickjs-go
 
+
+[![codecov](https://codecov.io/gh/buke/quickjs-go/branch/main/graph/badge.svg?token=DW5RGD01AG)](https://codecov.io/gh/buke/quickjs-go)
+![test workflow](https://github.com/buke/quickjs-go/actions/workflows/test/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/buke/quickjs-go)](https://goreportcard.com/report/github.com/buke/quickjs-go)
+[![GoDoc](https://pkg.go.dev/badge/github.com/buke/quickjs-go?status.svg)](https://pkg.go.dev/github.com/buke/quickjs-go?tab=doc)
+
+
+
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/gin-gonic/gin)](https://goreportcard.com/report/github.com/gin-gonic/gin)
+
 Go bindings to QuickJS: a fast, small, and embeddable ES2020 JavaScript interpreter.
 
 ## Features
