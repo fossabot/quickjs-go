@@ -1,4 +1,4 @@
-name: Build QuickJS Static Library
+name: Build
 
 on:
   workflow_dispatch:
